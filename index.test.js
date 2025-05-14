@@ -40,11 +40,27 @@ describe('Band, Musician, and Song Models', () => {
 
     test('can delete a Band', async () => {
         // TODO - test deleting a band
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const testBand = await Band.create({
+            name: "XYZ",
+            genre: "Rock"
+        })
+        const deletedBand = await testBand.destroy();
+        expect(deletedBand).toEqual(expect.objectContaining({
+            name: "XYZ",
+            genre: "Rock"
+        }));
     })
 
     test('can delete a Musician', async () => {
         // TODO - test deleting a musician
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const testMusician = await Musician.create({
+            name: "John",
+            instrument: "Drums"
+        })
+        const destroyedMusician = await testMusician.destroy();
+        expect(destroyedMusician).toEqual(expect.objectContaining({
+            name: "John",
+            instrument: "Drums"
+        }));
     })
 })
