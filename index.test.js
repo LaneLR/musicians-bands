@@ -129,13 +129,25 @@ describe("Band, Musician, and Song Models", () => {
       salary: 1000000,
       dateHired: "5/15/2025"
     });
-
+    const testManager2 = await Manager.create({
+      name: "Bob",
+      email: "Bob@gmail.com",
+      salary: 2000000,
+      dateHired: "4/15/2025"
+    });
+    // set first manager
     await testBand.setManager(testManager);
-    
     let testBandManager = await testBand.getManager();
-
     expect(testBandManager.name).toEqual("Rob");
-  }, 10000)
 
+    //set second new manager
+    await testBand.setManager(testManager2);
+    testBandManager = await testBand.getManager();
+    expect(testBandManager.name).toEqual("Bob");
 
+    //check if first manager is no longer associated to band
+    const oldManager = await Manager.findByPk(1);
+    expect(oldManager.bandId).toBeNull()
+
+  })
 });
