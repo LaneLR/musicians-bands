@@ -97,4 +97,17 @@ describe("Band, Musician, and Song Models", () => {
 
     expect(kornMusician[0].name).toEqual("John");
   });
+
+  test("many bands have many songs AND a song can have many bands", async () => {
+    const Korn = await Band.create({name: "Korn", genre: "Pop"});
+    const Poppy = await Band.create({name: "Poppy", genre: "HipHop"});
+    const song1 = await Song.create({title: 'Hello'})
+    const song2 = await Song.create({title: 'Farewell'})
+
+    await Korn.addSongs([song1, song2])
+
+    const foundBand = await Korn.getSongs()
+
+    expect(foundBand.length).toBe(2)
+  })
 });
