@@ -106,8 +106,11 @@ describe("Band, Musician, and Song Models", () => {
 
     await Korn.addSongs([song1, song2])
 
-    const foundBand = await Korn.getSongs()
+    const foundSongs = await Korn.getSongs()
+    expect(foundSongs.length).toBe(2)
 
-    expect(foundBand.length).toBe(2)
+    await song2.addBand(Poppy)
+    const foundBands = await song2.getBands();
+    expect(foundBands.map(band => band.name)).toContain('Poppy')
   })
 });
