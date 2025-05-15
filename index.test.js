@@ -1,5 +1,5 @@
 const { sequelize } = require("./db");
-const { Band, Musician, Song } = require("./index");
+const { Band, Manager, Musician, Song } = require("./index");
 
 describe("Band, Musician, and Song Models", () => {
   /**
@@ -10,6 +10,10 @@ describe("Band, Musician, and Song Models", () => {
     // by setting 'force:true' the tables are recreated each time the
     // test suite is run
     await sequelize.sync({ force: true });
+  });
+
+  afterAll(async () => {
+    await sequelize.close();
   });
 
   test("can create a Band", async () => {
@@ -113,4 +117,25 @@ describe("Band, Musician, and Song Models", () => {
     const foundBands = await song2.getBands();
     expect(foundBands.map(band => band.name)).toContain('Poppy')
   })
+
+  test("Testing one-to-one association between Manager and Band", async () => {
+    const testBand = await Band.create({
+      name: "Test Band",
+      instrument: "Drums",
+    });
+    const testManager = await Manager.create({
+      name: "Rob",
+      email: "Rob@gmail.com",
+      salary: 1000000,
+      dateHired: "5/15/2025"
+    });
+
+    await testBand.setManager(testManager);
+    
+    let testBandManager = await testBand.getManager();
+
+    expect(testBandManager.name).toEqual("Rob");
+  }, 10000)
+
+
 });
